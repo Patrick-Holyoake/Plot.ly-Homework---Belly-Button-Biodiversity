@@ -18,27 +18,27 @@ function buildMetadata(sample) {
           var samples = data.samples;
           var filteredData = samples.filter(sampleobject => sampleobject.id == sample);
           var Data = filteredData[0];
-          // Step 1: Plotly
+          // Plots
           var ids = Data.otu_ids;
           var labels = Data.otu_labels;
           var values = Data.sample_values;
           console.log(ids, labels, values);
       
-          // Create a bar chart
+          //Bar charts
           var barData = [{
-            y: ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse(),
-            x: values.slice(0, 10).reverse(),
-            text: labels.slice(0, 10).reverse(),
+            y: ids.slice(0, 5).map(otuID => `OTU ${otuID}`).reverse(),
+            x: values.slice(0, 5).reverse(),
+            text: labels.slice(0, 5).reverse(),
             //y: ids,
             //x: values,
             //text: labels,
             type: "bar",
             orientation: "h"
           }];
-          // Define our bar chart's layout
+          //Bar chart's layout
           var barlayout = {
-            title: "Top 10 OTUs fount in that individual",
-            margin: { t: 50, l: 150}
+            title: "Top 10 OTUs found in that individual",
+            margin: { t: 50, l: 200}
           };
           // Plot the chart
           Plotly.newPlot("bar", barData, barlayout);
@@ -79,7 +79,7 @@ function buildMetadata(sample) {
                 .property("value", sample);
             });
         
-            // Use the first sample from the list to build the initial plots
+            // Build intitial plots
             const firstSample = sampleNames[0];
             buildCharts(firstSample);
             buildMetadata(firstSample);
@@ -98,78 +98,7 @@ function buildMetadata(sample) {
     var samples = data.samples;
     var filteredData = samples.filter(sampleobject => sampleobject.id == sample);
     var Data = filteredData[0];
-    // Step 1: Plotly
-    var ids = Data.otu_ids;
-    var labels = Data.otu_labels;
-    var values = Data.sample_values;
-    console.log(ids, labels, values);
-
-    // Create a bar chart
-    var barData = [{
-      y: ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse(),
-      x: values.slice(0, 10).reverse(),
-      text: labels.slice(0, 10).reverse(),
-      //y: ids,
-      //x: values,
-      //text: labels,
-      type: "bar",
-      orientation: "h"
-    }];
-    // Define our bar chart's layout
-    var barlayout = {
-      title: "Top 10 OTUs fount in that individual",
-      margin: { t: 50, l: 150}
-    };
-    // Plot the chart
-    Plotly.newPlot("bar", barData, barlayout);
-
-    // Build Bubble chart
-    var bubbleData = [{
-      x: ids,
-      y: values,
-      text: labels,
-      mode: "markers",
-      marker: {
-        color: ids,
-        size: values,
-      }
-    }];
-    
-    var bubblelayout = {
-      margin: { t: 0 },
-      xaxis: { title: "OTU ID"},
-      hovermode: "closest",
-    }
-
-    Plotly.newPlot("bubble", bubbleData, bubblelayout);
     });
-}
-
-function init() {
-    // Grab a reference to the dropdown select element
-    var selector = d3.select("#selDataset");
-  
-    // Use the list of sample names to populate the select options
-    d3.json("samples.json").then((data) => {
-      var sampleNames = data.names;
-      sampleNames.forEach((sample) => {
-        selector
-          .append("option")
-          .text(sample)
-          .property("value", sample);
-      });
-  
-      // Use the first sample from the list to build the initial plots
-      const firstSample = sampleNames[0];
-      buildCharts(firstSample);
-      buildMetadata(firstSample);
-    });
-  }
-  
-  function optionChanged(newSample) {
-    // Fetch new data each time a new sample is selected
-    buildCharts(newSample);
-    buildMetadata(newSample);
   }
   
   // Initialize the dashboard
